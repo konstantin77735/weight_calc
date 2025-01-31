@@ -84,7 +84,7 @@ function updateRowResult(row) {
 
 
     
-    row.querySelector('.result').textContent = '= '+finalWeight.toFixed(5);
+    row.querySelector('.result').textContent = '= '+finalWeight.toFixed(5)+'кг';
 }
 
 // Подсчет общей суммы
@@ -119,7 +119,7 @@ function calculateTotal() {
     // Проверяем, существует ли элемент total перед обновлением
     const totalElement = document.getElementById('total');
     if (totalElement) {
-        totalElement.textContent = total.toFixed(5);
+        totalElement.textContent = '= '+total.toFixed(5)+'кг';
     } else {
         console.error('Элемент #total не найден! Добавьте его в HTML.');
     }
