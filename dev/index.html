@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lever Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .row {
+            margin-bottom: 10px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lever Calculator</h1>
+
+    <label for="quantity">Number of plates:</label>
+    <input type="number" id="quantity" min="1" value="1">
+    <button onclick="generateRows()">Generate</button>
+
+    <form id="calculator">
+        <div id="rows">
+            <!-- Rows will be generated here -->
+        </div>
+        <button type="button" id="calculateButton" onclick="calculateTotal()">Calculate</button>
+        <div class="row">
+            <strong>Total:</strong>
+            <span id="total">0.00</span>
+        </div>
+    </form>
+
+    <script>
+function generateRows() {
+    const quantity = parseInt(document.getElementById('quantity').value, 10);
+    const rowsContainer = document.getElementById('rows');
+    rowsContainer.innerHTML = ''; // Очистка существующих строк
+
+    for (let i = 0; i < quantity; i++) {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+            <label>Weight:</label>
+            <input type="number" class="weight" step="0.01" required>
+            <label>Thickness:</label>
+            <input type="number" class="thickness" step="0.01" required>
+            <label>Lever:</label>
+            <input type="number" class="lever" step="0.01" required>
+            <span class="result">0.00</span>
+        `;
+        
+        rowsContainer.appendChild(row);
+
+        // Добавляем обработчики ввода
+        const inputs = row.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                updateRowResult(row);
+                calculateTotal(); // Пересчитываем total при изменении данных
+            });
+        });
+    }
+}
+
+// Обновление результата для каждой строки
+function updateRowResult(row) {
+    const weight = parseFloat(row.querySelector('.weight').value) || 0;
+    const thickness = parseFloat(row.querySelector('.thickness').value) || 1; // Избегаем деления на 0
+    const lever = parseFloat(row.querySelector('.lever').value) || 0;
+    const result = weight * (1 + lever / thickness);
+    
+    row.querySelector('.result').textContent = result.toFixed(2);
+}
+
+// Подсчет общей суммы
+function calculateTotal() {
+    const rows = document.querySelectorAll('.row');
+    let total = 0;
+
+    rows.forEach(row => {
+        const weightInput = row.querySelector('.weight');
+        const thicknessInput = row.querySelector('.thickness');
+        const leverInput = row.querySelector('.lever');
+
+        // Проверяем, существуют ли элементы перед доступом к их значениям
+        if (weightInput && thicknessInput && leverInput) {
+            const weight = parseFloat(weightInput.value) || 0;
+            const thickness = parseFloat(thicknessInput.value) || 1;
+            const lever = parseFloat(leverInput.value) || 0;
+            total += weight * (1 + lever / thickness);
+        } else {
+            console.error("Не найден один из инпутов в строке!", row);
+        }
+    });
+
+    // Проверяем, существует ли элемент total перед обновлением
+    const totalElement = document.getElementById('total');
+    if (totalElement) {
+        totalElement.textContent = total.toFixed(2);
+    } else {
+        console.error('Элемент #total не найден! Добавьте его в HTML.');
+    }
+}
+    </script>
+</body>
+</html>
