@@ -77,7 +77,7 @@ function updateRowResult(row) {
     const lever = parseFloat(row.querySelector('.lever').value) || 0;
     const result = weight * (1 + lever / thickness);
     
-    row.querySelector('.result').textContent = result.toFixed(2);
+    row.querySelector('.result').textContent = '= '+result.toFixed(2);
 }
 
 // Подсчет общей суммы
