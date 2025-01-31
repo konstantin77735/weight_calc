@@ -75,9 +75,16 @@ function updateRowResult(row) {
     const weight = parseFloat(row.querySelector('.weight').value) || 0;
     const thickness = parseFloat(row.querySelector('.thickness').value) || 1; // Избегаем деления на 0
     const lever = parseFloat(row.querySelector('.lever').value) || 0;
-    const result = weight * (1 + lever / thickness);
+    //total += weight * (1 + lever / thickness);
+    d = lever/100+  ( (thickness/100) /2) // расстояние до центра масс
+    let M = weight * 9.81 * d
+    let m = M/9.81 // доп. кг к весу
+    let finalWeight = weight+m
+
+
+
     
-    row.querySelector('.result').textContent = '= '+result.toFixed(2);
+    row.querySelector('.result').textContent = '= '+finalWeight.toFixed(5);
 }
 
 // Подсчет общей суммы
@@ -95,7 +102,15 @@ function calculateTotal() {
             const weight = parseFloat(weightInput.value) || 0;
             const thickness = parseFloat(thicknessInput.value) || 1;
             const lever = parseFloat(leverInput.value) || 0;
-            total += weight * (1 + lever / thickness);
+            //total += weight * (1 + lever / thickness);
+            d = lever/100+  ( (thickness/100) /2) // расстояние до центра масс
+            let M = weight * 9.81 * d
+            let m = M/9.81 // доп. кг к весу
+            let finalWeight = weight+m
+            
+            total += finalWeight
+
+           
         } else {
             console.error("Не найден один из инпутов в строке!", row);
         }
@@ -104,7 +119,7 @@ function calculateTotal() {
     // Проверяем, существует ли элемент total перед обновлением
     const totalElement = document.getElementById('total');
     if (totalElement) {
-        totalElement.textContent = total.toFixed(2);
+        totalElement.textContent = total.toFixed(5);
     } else {
         console.error('Элемент #total не найден! Добавьте его в HTML.');
     }
